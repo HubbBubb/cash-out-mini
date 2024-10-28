@@ -67,6 +67,7 @@ struct ExpenseListView: View {
                     }
                     .groupBoxStyle(ClearGroupBoxStyle())
                 }
+                
                 ForEach(groupedExpenses.keys.sorted(by: <), id: \.self) { month in
                     Section(header: Text(month).font(.title3).bold()) {
                         ForEach(groupedExpenses[month] ?? []) { expense in
@@ -85,7 +86,7 @@ struct ExpenseListView: View {
                         }
                     }
                 }
-                .navigationTitle("Expenses")
+            
                 .toolbar {
                     ToolbarItem(placement: .principal) {
                         VStack {

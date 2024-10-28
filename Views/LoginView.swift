@@ -35,7 +35,8 @@ struct LoginView: View {
             switch result {
             case .success(let authResults):
                 if let credential = authResults.credential as? ASAuthorizationAppleIDCredential {
-                    userName = credential.fullName?.givenName ?? "User"
+                    print(credential)
+                    userName = credential.fullName?.givenName ?? credential.fullName?.familyName ?? "User"
                     isUserLoggedIn = true
                     presentationMode.wrappedValue.dismiss()
                 }
