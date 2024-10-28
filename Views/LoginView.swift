@@ -10,8 +10,9 @@ import AuthenticationServices
 
 struct LoginView: View {
     @Environment(\.presentationMode) var presentationMode
-        @Binding var isUserLoggedIn: Bool
-        @Binding var userName: String?
+    @Binding var isUserLoggedIn: Bool
+    @Binding var userName: String?
+    
     var body: some View {
             VStack(spacing: 20) {
                 Text("Sign in to continue")

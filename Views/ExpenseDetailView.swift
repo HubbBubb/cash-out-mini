@@ -8,8 +8,11 @@ import SwiftUI
 
 struct ExpenseDetailView: View {
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var expenseManager: ExpenseManager
     var expense: Expense
     
+    @State private var showDeleteConfirmation = false
+
     var body: some View {
         VStack {
             HStack {
@@ -53,8 +56,39 @@ struct ExpenseDetailView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             
             Spacer()
+            
+            Button(action: {
+                showDeleteConfirmation = true
+            }) {
+                Text("Delete Expense")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.red)
+                    .cornerRadius(8)
+            }
+            .padding(.horizontal)
+            .padding(.bottom, 10)
+            .alert(isPresented: $showDeleteConfirmation) {
+                Alert(
+                    title: Text("Delete Expense"),
+                    message: Text("Are you sure you want to delete this expense?"),
+                    primaryButton: .destructive(Text("Delete")) {
+                        deleteExpense()
+                    },
+                    secondaryButton: .cancel()
+                )
+            }
         }
         .padding()
+    }
+    
+    private func deleteExpense() {
+        if let index = expenseManager.expenses.firstIndex(where: { $0.id == expense.id }) {
+            expenseManager.expenses.remove(at: index)
+            presentationMode.wrappedValue.dismiss()
+        }
     }
 }
 

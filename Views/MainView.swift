@@ -8,21 +8,17 @@ import SwiftUI
 
 struct MainView: View {
     @State private var isAddExpenseViewPresented = false
-    @State private var isUserLoggedIn = false
-    @State private var userName: String? = nil
     @State private var isLoginViewPresented = false
     @StateObject private var expenseManager = ExpenseManager()
+    @State private var isUserLoggedIn = false
+    @State private var userName: String? = nil
 
     var body: some View {
         VStack {
-            if let userName = userName, isUserLoggedIn {
-                Text("Hello, \(userName)!")
-                    .font(.headline)
-                    .padding()
-            }
             TabView {
                 NavigationView {
-                    ExpenseListView(expenseManager: expenseManager)
+                    ExpenseListView(expenseManager: expenseManager, userName: userName)
+                        .environmentObject(expenseManager)
                         .navigationBarTitleDisplayMode(.inline)
                         .toolbar {
                             ToolbarItem(placement: .principal) {
@@ -31,14 +27,17 @@ struct MainView: View {
                                     .scaledToFit()
                                     .frame(height: 30)
                             }
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button(action: {
-                                    isLoginViewPresented = true
-                                }) {
-                                    Image(systemName: "person.circle")
-                                        .font(.title)
+                            if !isUserLoggedIn {
+                                ToolbarItem(placement: .navigationBarLeading) {
+                                    Button(action: {
+                                        isLoginViewPresented = true
+                                    }) {
+                                        Image(systemName: "person.circle")
+                                            .font(.title)
+                                    }
                                 }
                             }
+                        
                             ToolbarItem(placement: .navigationBarTrailing) {
                                 Button(action: {
                                     isAddExpenseViewPresented = true
@@ -71,6 +70,6 @@ struct MainView: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView()
+        MainView().environmentObject(ExpenseManager())
     }
 }
